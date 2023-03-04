@@ -1,0 +1,8 @@
+[Unit]
+Description=Toggle boost alongside power profile changes
+
+[Service]
+ExecStart=/usr/local/bin/boost-control
+
+[Install]
+WantedBy=multi-user.target
