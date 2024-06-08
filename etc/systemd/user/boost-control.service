@@ -5,4 +5,4 @@ Description=Toggle boost alongside power profile changes
 ExecStart=/usr/local/bin/boost-control
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target

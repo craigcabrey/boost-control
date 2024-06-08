@@ -3,6 +3,7 @@
 import argparse
 import enum
 import os
+import subprocess
 import sys
 from gi.repository import Gio, GLib, GObject
 
@@ -58,8 +59,16 @@ class BoostProfile:
         with open(tunable.value, 'w') as f:
             f.write(str(value))
 
+        if self.boost:
+            subprocess.run(['gnome-randr', 'modify', 'eDP-1', '-m', '2880x1920@120.000+vrr'])
+        else:
+            subprocess.run(['gnome-randr', 'modify', 'eDP-1', '-m', '2880x1920@60.001+vrr'])
+
 
 def on_changed_props(proxy, changed_props, invalidated_props):
+    if not dict(changed_props).get('ActiveProfile'):
+        return
+
     BoostProfile(changed_props['ActiveProfile']).apply()
 
 
@@ -69,7 +78,7 @@ def parse_args():
     args.add_argument(
         '--boost-profiles',
         nargs='+',
-        default=['performance'],
+        default=['balanced', 'performance'],
         help='Power profiles for which boost should be enabled',
     )
 
